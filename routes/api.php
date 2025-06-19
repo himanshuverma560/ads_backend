@@ -20,10 +20,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CityController;
 
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
 
 Route::get('/profiles', [ProfileController::class, 'index']);
+Route::get('/cities', [CityController::class, 'index']);
 Route::middleware('jwt')->group(function () {
     Route::post('/profiles', [ProfileController::class, 'store']);
     Route::post('/profiles/{profile}', [ProfileController::class, 'update']);
