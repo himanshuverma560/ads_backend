@@ -23,12 +23,15 @@ class ProfileController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
+        return response()->json(Profile::all());
+
     }
 
     public function store(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
+
             'name' => 'required|string',
             'email' => 'required|email',
             'mobile' => 'required|string',
@@ -70,12 +73,14 @@ class ProfileController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
+
     }
 
     public function update(Request $request, Profile $profile)
     {
         try {
             $validator = Validator::make($request->all(), [
+
             'name' => 'sometimes|required|string',
             'email' => 'sometimes|required|email',
             'mobile' => 'sometimes|required|string',
