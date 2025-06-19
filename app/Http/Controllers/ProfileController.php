@@ -9,10 +9,26 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $profiles = Profile::all();
+            $query = Profile::query();
+
+            if ($city = $request->query('city')) {
+                $query->where('city', $city);
+            }
+
+            if ($request->boolean('is_random')) {
+                $query->inRandomOrder();
+            } else {
+                $sortBy = $request->query('sort_by', 'id');
+                $sortOrder = $request->query('sort_order', 'asc');
+                $query->orderBy($sortBy, $sortOrder);
+            }
+
+            $perPage = (int) $request->query('per_page', 15);
+            $profiles = $query->paginate($perPage);
+
             return response()->json([
                 'status' => true,
                 'data' => $profiles,
@@ -23,8 +39,6 @@ class ProfileController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
-        return response()->json(Profile::all());
-
     }
 
     public function store(Request $request)
