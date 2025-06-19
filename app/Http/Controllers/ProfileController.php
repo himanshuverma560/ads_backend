@@ -11,12 +11,27 @@ class ProfileController extends Controller
 {
     public function index()
     {
+        try {
+            $profiles = Profile::all();
+            return response()->json([
+                'status' => true,
+                'data' => $profiles,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
         return response()->json(Profile::all());
+
     }
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        try {
+            $validator = Validator::make($request->all(), [
+
             'name' => 'required|string',
             'email' => 'required|email',
             'mobile' => 'required|string',
@@ -29,28 +44,43 @@ class ProfileController extends Controller
             'images.*' => 'image'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $data = $validator->validated();
-
-        if ($request->hasFile('images')) {
-            $paths = [];
-            foreach ($request->file('images') as $image) {
-                $paths[] = $image->store('profile_images', 'public');
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'errors' => $validator->errors(),
+                ], 422);
             }
-            $data['images'] = $paths;
+
+            $data = $validator->validated();
+
+            if ($request->hasFile('images')) {
+                $paths = [];
+                foreach ($request->file('images') as $image) {
+                    $paths[] = $image->store('profile_images', 'public');
+                }
+                $data['images'] = $paths;
+            }
+
+            $profile = Profile::create($data);
+
+            return response()->json([
+                'status' => true,
+                'data' => $profile,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
         }
 
-        $profile = Profile::create($data);
-
-        return response()->json($profile, 201);
     }
 
     public function update(Request $request, Profile $profile)
     {
-        $validator = Validator::make($request->all(), [
+        try {
+            $validator = Validator::make($request->all(), [
+
             'name' => 'sometimes|required|string',
             'email' => 'sometimes|required|email',
             'mobile' => 'sometimes|required|string',
@@ -63,22 +93,34 @@ class ProfileController extends Controller
             'images.*' => 'image'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $data = $validator->validated();
-
-        if ($request->hasFile('images')) {
-            $paths = [];
-            foreach ($request->file('images') as $image) {
-                $paths[] = $image->store('profile_images', 'public');
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'errors' => $validator->errors(),
+                ], 422);
             }
-            $data['images'] = $paths;
+
+            $data = $validator->validated();
+
+            if ($request->hasFile('images')) {
+                $paths = [];
+                foreach ($request->file('images') as $image) {
+                    $paths[] = $image->store('profile_images', 'public');
+                }
+                $data['images'] = $paths;
+            }
+
+            $profile->update($data);
+
+            return response()->json([
+                'status' => true,
+                'data' => $profile,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
         }
-
-        $profile->update($data);
-
-        return response()->json($profile);
     }
 }
