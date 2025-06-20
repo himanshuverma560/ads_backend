@@ -25,6 +25,7 @@ use App\Http\Controllers\CityController;
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
 
 Route::get('/profiles', [ProfileController::class, 'index']);
+Route::get('/profiles/{profile}', [ProfileController::class, 'show']);
 Route::get('/cities', [CityController::class, 'index']);
 Route::middleware('jwt')->group(function () {
     Route::post('/profiles', [ProfileController::class, 'store']);
