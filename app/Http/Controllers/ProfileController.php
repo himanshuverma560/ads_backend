@@ -46,17 +46,17 @@ class ProfileController extends Controller
         try {
             $validator = Validator::make($request->all(), [
 
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'mobile' => 'required|string',
-            'facebook' => 'nullable|string',
-            'insta_id' => 'nullable|string',
-            'telegram_id' => 'nullable|string',
-            'about_us' => 'nullable|string',
-            'city' => 'nullable|string',
-            'age' => 'nullable|integer',
-            'images.*' => 'image'
-        ]);
+                'name' => 'required|string',
+                'email' => 'required|email',
+                'mobile' => 'required|string',
+                'facebook' => 'nullable|string',
+                'insta_id' => 'nullable|string',
+                'telegram_id' => 'nullable|string',
+                'about_us' => 'nullable|string',
+                'city' => 'nullable|string',
+                'age' => 'nullable|integer',
+                'images.*' => 'image'
+            ]);
 
             if ($validator->fails()) {
                 return response()->json([
@@ -70,7 +70,10 @@ class ProfileController extends Controller
             if ($request->hasFile('images')) {
                 $paths = [];
                 foreach ($request->file('images') as $image) {
-                    $paths[] = $image->store('profile_images', 'public');
+                    // Move file directly into public/profile_images
+                    $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
+                    $image->move(public_path('profile_images'), $fileName);
+                    $paths[] = 'profile_images/' . $fileName;
                 }
                 $data['images'] = $paths;
             }
@@ -95,17 +98,17 @@ class ProfileController extends Controller
         try {
             $validator = Validator::make($request->all(), [
 
-            'name' => 'sometimes|required|string',
-            'email' => 'sometimes|required|email',
-            'mobile' => 'sometimes|required|string',
-            'facebook' => 'nullable|string',
-            'insta_id' => 'nullable|string',
-            'telegram_id' => 'nullable|string',
-            'about_us' => 'nullable|string',
-            'city' => 'nullable|string',
-            'age' => 'nullable|integer',
-            'images.*' => 'image'
-        ]);
+                'name' => 'sometimes|required|string',
+                'email' => 'sometimes|required|email',
+                'mobile' => 'sometimes|required|string',
+                'facebook' => 'nullable|string',
+                'insta_id' => 'nullable|string',
+                'telegram_id' => 'nullable|string',
+                'about_us' => 'nullable|string',
+                'city' => 'nullable|string',
+                'age' => 'nullable|integer',
+                'images.*' => 'image'
+            ]);
 
             if ($validator->fails()) {
                 return response()->json([
@@ -119,7 +122,10 @@ class ProfileController extends Controller
             if ($request->hasFile('images')) {
                 $paths = [];
                 foreach ($request->file('images') as $image) {
-                    $paths[] = $image->store('profile_images', 'public');
+                    // Move file directly into public/profile_images
+                    $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
+                    $image->move(public_path('profile_images'), $fileName);
+                    $paths[] = 'profile_images/' . $fileName;
                 }
                 $data['images'] = $paths;
             }
