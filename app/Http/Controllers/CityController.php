@@ -33,7 +33,7 @@ class CityController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
+                'name' => 'required|string|unique:cities,name',
                 'state_id' => 'required|exists:states,id',
                 'image' => 'nullable|image',
             ]);
@@ -69,7 +69,7 @@ class CityController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
+                'name' => 'required|string|unique:cities,name,' . $city->id,
                 'state_id' => 'required|exists:states,id',
                 'image' => 'nullable|image',
             ]);

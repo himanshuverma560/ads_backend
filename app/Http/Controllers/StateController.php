@@ -32,7 +32,7 @@ class StateController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
+                'name' => 'required|string|unique:states,name',
                 'country_id' => 'required|exists:countries,id',
             ]);
 
@@ -60,7 +60,7 @@ class StateController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
+                'name' => 'required|string|unique:states,name,' . $state->id,
                 'country_id' => 'required|exists:countries,id',
             ]);
 

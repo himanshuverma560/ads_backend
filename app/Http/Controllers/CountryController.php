@@ -28,7 +28,7 @@ class CountryController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
+                'name' => 'required|string|unique:countries,name',
             ]);
 
             if ($validator->fails()) {
@@ -55,7 +55,7 @@ class CountryController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
+                'name' => 'required|string|unique:countries,name,' . $country->id,
             ]);
 
             if ($validator->fails()) {
