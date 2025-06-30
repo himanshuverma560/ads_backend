@@ -3,16 +3,31 @@
 namespace Database\Seeders;
 
 use App\Models\City;
+use App\Models\State;
 use Illuminate\Database\Seeder;
 
 class CitySeeder extends Seeder
 {
     public function run(): void
     {
-        $cities = ['Delhi', 'Mumbai', 'Kolkata', 'Chennai', 'Bangalore'];
+        $map = [
+            'Delhi' => 'Delhi',
+            'Mumbai' => 'Maharashtra',
+            'Kolkata' => 'West Bengal',
+            'Chennai' => 'Tamil Nadu',
+            'Bangalore' => 'Karnataka',
+        ];
 
-        foreach ($cities as $name) {
-            City::firstOrCreate(['name' => $name]);
+        foreach ($map as $cityName => $stateName) {
+            $state = State::firstOrCreate([
+                'name' => $stateName,
+                'country_id' => 1,
+            ]);
+
+            City::firstOrCreate([
+                'name' => $cityName,
+                'state_id' => $state->id,
+            ]);
         }
     }
 }

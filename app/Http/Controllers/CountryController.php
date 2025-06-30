@@ -2,24 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\City;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CityController extends Controller
+class CountryController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         try {
-            $query = City::query()->orderBy('name');
-            if ($stateId = $request->query('state_id')) {
-                $query->where('state_id', $stateId);
-            }
-            $cities = $query->get();
-
+            $countries = Country::orderBy('name')->get();
             return response()->json([
                 'status' => true,
-                'data' => $cities,
+                'data' => $countries,
             ]);
         } catch (\Throwable $e) {
             return response()->json([
@@ -34,8 +29,6 @@ class CityController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
-                'state_id' => 'required|exists:states,id',
-                'image' => 'nullable|image',
             ]);
 
             if ($validator->fails()) {
@@ -45,17 +38,10 @@ class CityController extends Controller
                 ], 422);
             }
 
-            $data = $validator->validated();
-            if ($request->hasFile('image')) {
-                $fileName = uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
-                $request->file('image')->move(public_path('city_images'), $fileName);
-                $data['image'] = 'city_images/' . $fileName;
-            }
-
-            $city = City::create($data);
+            $country = Country::create($validator->validated());
             return response()->json([
                 'status' => true,
-                'data' => $city,
+                'data' => $country,
             ], 201);
         } catch (\Throwable $e) {
             return response()->json([
@@ -65,13 +51,11 @@ class CityController extends Controller
         }
     }
 
-    public function update(Request $request, City $city)
+    public function update(Request $request, Country $country)
     {
         try {
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
-                'state_id' => 'required|exists:states,id',
-                'image' => 'nullable|image',
             ]);
 
             if ($validator->fails()) {
@@ -81,18 +65,10 @@ class CityController extends Controller
                 ], 422);
             }
 
-            $data = $validator->validated();
-            if ($request->hasFile('image')) {
-                $fileName = uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
-                $request->file('image')->move(public_path('city_images'), $fileName);
-                $data['image'] = 'city_images/' . $fileName;
-            }
-
-            $city->update($data);
-
+            $country->update($validator->validated());
             return response()->json([
                 'status' => true,
-                'data' => $city,
+                'data' => $country,
             ]);
         } catch (\Throwable $e) {
             return response()->json([
