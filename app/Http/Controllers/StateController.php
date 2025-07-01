@@ -8,14 +8,17 @@ use Illuminate\Support\Facades\Validator;
 
 class StateController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Return all states that belong to the given country ID.
+     */
+    public function index($id)
     {
         try {
-            $query = State::query()->orderBy('name');
-            if ($countryId = $request->query('country_id')) {
-                $query->where('country_id', $countryId);
-            }
-            $states = $query->get();
+            $states = State::query()
+                ->where('country_id', $id)
+                ->orderBy('name')
+                ->get();
+
             return response()->json([
                 'status' => true,
                 'data' => $states,
