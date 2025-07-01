@@ -18,6 +18,18 @@ class ProfileController extends Controller
                 $query->where('city', $city);
             }
 
+            if ($cityId = $request->query('city_id')) {
+                $query->where('city_id', $cityId);
+            }
+
+            if ($stateId = $request->query('state_id')) {
+                $query->where('state_id', $stateId);
+            }
+
+            if ($countryId = $request->query('country_id')) {
+                $query->where('country_id', $countryId);
+            }
+
             if ($request->boolean('is_random')) {
                 $query->inRandomOrder();
             } else {
@@ -72,6 +84,9 @@ class ProfileController extends Controller
                 'video_call_link' => 'nullable|string',
                 'about_us' => 'nullable|string',
                 'city' => 'nullable|string',
+                'city_id' => 'nullable|exists:cities,id',
+                'state_id' => 'nullable|exists:states,id',
+                'country_id' => 'nullable|exists:countries,id',
                 'age' => 'nullable|integer',
                 'images.*' => 'image'
             ]);
@@ -127,6 +142,9 @@ class ProfileController extends Controller
                 'video_call_link' => 'nullable|string',
                 'about_us' => 'nullable|string',
                 'city' => 'nullable|string',
+                'city_id' => 'nullable|exists:cities,id',
+                'state_id' => 'nullable|exists:states,id',
+                'country_id' => 'nullable|exists:countries,id',
                 'age' => 'nullable|integer',
                 'images.*' => 'image'
             ]);
