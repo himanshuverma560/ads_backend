@@ -8,14 +8,16 @@ use Illuminate\Support\Facades\Validator;
 
 class CityController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Return all cities that belong to the given state ID.
+     */
+    public function index($id)
     {
         try {
-            $query = City::query()->orderBy('name');
-            if ($stateId = $request->query('state_id')) {
-                $query->where('state_id', $stateId);
-            }
-            $cities = $query->get();
+            $cities = City::query()
+                ->where('state_id', $id)
+                ->orderBy('name')
+                ->get();
 
             return response()->json([
                 'status' => true,

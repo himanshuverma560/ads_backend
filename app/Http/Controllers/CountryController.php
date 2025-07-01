@@ -8,13 +8,17 @@ use Illuminate\Support\Facades\Validator;
 
 class CountryController extends Controller
 {
-    public function index()
+    /**
+     * Display the specified country by its ID.
+     */
+    public function index($id)
     {
         try {
-            $countries = Country::orderBy('name')->get();
+            $country = Country::findOrFail($id);
+
             return response()->json([
                 'status' => true,
-                'data' => $countries,
+                'data' => $country,
             ]);
         } catch (\Throwable $e) {
             return response()->json([

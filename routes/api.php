@@ -28,9 +28,9 @@ Route::post('/admin/login', [AdminAuthController::class, 'login']);
 
 Route::get('/profiles', [ProfileController::class, 'index']);
 Route::get('/profiles/{profile}', [ProfileController::class, 'show']);
-Route::get('/cities', [CityController::class, 'index']);
-Route::get('/countries', [CountryController::class, 'index']);
-Route::get('/states', [StateController::class, 'index']);
+Route::get('/cities/{id}', [CityController::class, 'index']);
+Route::get('/countries/{id}', [CountryController::class, 'index']);
+Route::get('/states/{id}', [StateController::class, 'index']);
 Route::middleware('jwt')->group(function () {
     Route::post('/profiles', [ProfileController::class, 'store']);
     Route::post('/profiles/{profile}', [ProfileController::class, 'update']);
