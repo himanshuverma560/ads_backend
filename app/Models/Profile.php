@@ -21,6 +21,9 @@ class Profile extends Model
         'video_call_link',
         'about_us',
         'city',
+        'city_id',
+        'state_id',
+        'country_id',
         'age',
         'images',
     ];
