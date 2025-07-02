@@ -31,6 +31,28 @@ class CityController extends Controller
         }
     }
 
+    /**
+     * Return all cities regardless of state.
+     */
+    public function all()
+    {
+        try {
+            $cities = City::query()
+                ->orderBy('name')
+                ->get();
+
+            return response()->json([
+                'status' => true,
+                'data' => $cities,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function store(Request $request)
     {
         try {
