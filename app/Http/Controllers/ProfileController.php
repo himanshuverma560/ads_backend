@@ -12,7 +12,7 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         try {
-            $query = Profile::query();
+            $query = Profile::with(['cityRelation', 'state', 'country']);
 
             if ($city = $request->query('city')) {
                 $query->where('city', $city);
@@ -56,6 +56,7 @@ class ProfileController extends Controller
     public function show(Profile $profile)
     {
         try {
+            $profile->load(['cityRelation', 'state', 'country']);
             return response()->json([
                 'status' => true,
                 'data' => $profile,
