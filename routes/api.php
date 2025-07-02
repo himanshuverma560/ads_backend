@@ -28,6 +28,7 @@ Route::post('/admin/login', [AdminAuthController::class, 'login']);
 
 Route::get('/profiles', [ProfileController::class, 'index']);
 Route::get('/profiles/{profile}', [ProfileController::class, 'show']);
+Route::get('/cities', [CityController::class, 'all']);
 Route::get('/cities/{id}', [CityController::class, 'index']);
 Route::get('/countries', [CountryController::class, 'index']);
 Route::get('/states/{id}', [StateController::class, 'index']);

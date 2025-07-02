@@ -71,6 +71,10 @@ php artisan db:seed --class=AdminSeeder
 
 Then send a `POST /api/admin/login` request with `email` and `password` to obtain a JWT token along with the admin's name and email.
 
+## API Endpoints
+
+- `GET /api/cities` - Retrieve a list of all cities.
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
