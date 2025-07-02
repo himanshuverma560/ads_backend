@@ -11,10 +11,10 @@ class CountryController extends Controller
     /**
      * Display the specified country by its ID.
      */
-    public function index($id)
+    public function index()
     {
         try {
-            $country = Country::findOrFail($id);
+            $country = Country::get();
 
             return response()->json([
                 'status' => true,
