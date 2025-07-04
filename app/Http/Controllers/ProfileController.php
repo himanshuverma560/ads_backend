@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profile;
+use App\Models\ProfileView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -12,7 +13,8 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         try {
-            $query = Profile::with(['cityRelation', 'state', 'country']);
+            $query = Profile::with(['cityRelation', 'state', 'country'])
+                ->withCount('views');
 
             if ($city = $request->query('city')) {
                 $query->where('city', $city);
@@ -53,10 +55,17 @@ class ProfileController extends Controller
         }
     }
 
-    public function show(Profile $profile)
+    public function show(Request $request, Profile $profile)
     {
         try {
-            $profile->load(['cityRelation', 'state', 'country']);
+            ProfileView::firstOrCreate([
+                'profile_id' => $profile->id,
+                'ip_address' => $request->ip(),
+            ]);
+
+            $profile->load(['cityRelation', 'state', 'country'])
+                ->loadCount('views');
+
             return response()->json([
                 'status' => true,
                 'data' => $profile,
