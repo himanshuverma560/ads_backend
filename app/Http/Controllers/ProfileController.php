@@ -78,6 +78,28 @@ class ProfileController extends Controller
         }
     }
 
+    public function storeView(Request $request, Profile $profile)
+    {
+        try {
+            ProfileView::firstOrCreate([
+                'profile_id' => $profile->id,
+                'ip_address' => $request->ip(),
+            ]);
+
+            $profile->loadCount('views');
+
+            return response()->json([
+                'status' => true,
+                'data' => ['views_count' => $profile->views_count],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function store(Request $request)
     {
         try {
