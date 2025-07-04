@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\City;
 use App\Models\State;
 use App\Models\Country;
+use App\Models\ProfileView;
 
 class Profile extends Model
 {
@@ -48,5 +49,10 @@ class Profile extends Model
     public function country()
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function views()
+    {
+        return $this->hasMany(ProfileView::class);
     }
 }
