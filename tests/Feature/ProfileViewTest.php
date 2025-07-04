@@ -33,4 +33,24 @@ class ProfileViewTest extends TestCase
             ->assertStatus(200)
             ->assertJsonPath('data.data.0.views_count', 2);
     }
+
+    public function test_store_profile_view_via_endpoint(): void
+    {
+        $profile = Profile::factory()->create();
+
+        $this->postJson('/api/profiles/'.$profile->id.'/views', [], ['REMOTE_ADDR' => '1.1.1.1'])
+            ->assertStatus(200)
+            ->assertJson(['status' => true])
+            ->assertJsonPath('data.views_count', 1);
+
+        // same IP should not increase count
+        $this->postJson('/api/profiles/'.$profile->id.'/views', [], ['REMOTE_ADDR' => '1.1.1.1'])
+            ->assertStatus(200)
+            ->assertJsonPath('data.views_count', 1);
+
+        // different IP should increase count
+        $this->postJson('/api/profiles/'.$profile->id.'/views', [], ['REMOTE_ADDR' => '2.2.2.2'])
+            ->assertStatus(200)
+            ->assertJsonPath('data.views_count', 2);
+    }
 }
