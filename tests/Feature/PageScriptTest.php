@@ -24,6 +24,27 @@ class PageScriptTest extends TestCase
             ->assertJsonPath('data.page_type', 'home');
     }
 
+    public function test_store_multiple_page_scripts(): void
+    {
+        $payload = [
+            [
+                'page_type' => 'home',
+                'script' => 'console.log("a");',
+                'position' => 1,
+            ],
+            [
+                'page_type' => 'home',
+                'script' => 'console.log("b");',
+                'position' => 2,
+            ],
+        ];
+
+        $this->postJson('/api/page-scripts', $payload)
+            ->assertStatus(201)
+            ->assertJson(['status' => true])
+            ->assertJsonCount(2, 'data');
+    }
+
     public function test_duplicate_position_not_allowed(): void
     {
         PageScript::factory()->create(['page_type' => 'home', 'position' => 1]);
