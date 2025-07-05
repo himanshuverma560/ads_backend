@@ -31,7 +31,7 @@ class PageScriptController extends Controller
     public function store(Request $request)
     {
         try {
-            $payload = $request->all();
+            $payload = $request->data;
 
             $items = $payload;
             // If the payload is a single associative array, wrap it into an array
