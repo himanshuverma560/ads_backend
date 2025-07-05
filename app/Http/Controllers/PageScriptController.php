@@ -31,24 +31,37 @@ class PageScriptController extends Controller
     public function store(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'page_type' => 'required|string',
-                'script' => 'required|string',
-                'position' => 'required|integer|unique:page_scripts,position,NULL,id,page_type,' . $request->input('page_type'),
-            ]);
+            $payload = $request->all();
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'errors' => $validator->errors(),
-                ], 422);
+            $items = $payload;
+            // If the payload is a single associative array, wrap it into an array
+            if ($items === [] || array_keys($items) !== range(0, count($items) - 1)) {
+                $items = [$items];
             }
 
-            $pageScript = PageScript::create($validator->validated());
+            $created = [];
+            foreach ($items as $item) {
+                $validator = Validator::make($item, [
+                    'page_type' => 'required|string',
+                    'script' => 'required|string',
+                    'position' => 'required|integer|unique:page_scripts,position,NULL,id,page_type,' . ($item['page_type'] ?? null),
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => false,
+                        'errors' => $validator->errors(),
+                    ], 422);
+                }
+
+                $created[] = PageScript::create($validator->validated());
+            }
+
+            $data = count($created) === 1 ? $created[0] : $created;
 
             return response()->json([
                 'status' => true,
-                'data' => $pageScript,
+                'data' => $data,
             ], 201);
         } catch (\Throwable $e) {
             return response()->json([
