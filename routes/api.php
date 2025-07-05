@@ -23,6 +23,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\StateController;
+use App\Http\Controllers\PageScriptController;
 
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
 
@@ -33,6 +34,8 @@ Route::get('/cities', [CityController::class, 'all']);
 Route::get('/cities/{id}', [CityController::class, 'index']);
 Route::get('/countries', [CountryController::class, 'index']);
 Route::get('/states/{id}', [StateController::class, 'index']);
+Route::get('/page-scripts', [PageScriptController::class, 'index']);
+Route::post('/page-scripts', [PageScriptController::class, 'store']);
 Route::middleware('jwt')->group(function () {
     Route::post('/profiles', [ProfileController::class, 'store']);
     Route::post('/profiles/{profile}', [ProfileController::class, 'update']);
