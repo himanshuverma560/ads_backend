@@ -36,6 +36,7 @@ Route::get('/countries', [CountryController::class, 'index']);
 Route::get('/states/{id}', [StateController::class, 'index']);
 Route::get('/page-scripts', [PageScriptController::class, 'index']);
 Route::post('/page-scripts', [PageScriptController::class, 'store']);
+Route::post('/page-scripts/{pageScript}', [PageScriptController::class, 'update']);
 Route::middleware('jwt')->group(function () {
     Route::post('/profiles', [ProfileController::class, 'store']);
     Route::post('/profiles/{profile}', [ProfileController::class, 'update']);
