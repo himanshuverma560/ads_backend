@@ -24,6 +24,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\PageScriptController;
+use App\Http\Controllers\GoogleAnalyticController;
 
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
 
@@ -37,6 +38,8 @@ Route::get('/states/{id}', [StateController::class, 'index']);
 Route::get('/page-scripts', [PageScriptController::class, 'index']);
 Route::post('/page-scripts', [PageScriptController::class, 'store']);
 Route::post('/page-scripts/{pageScript}', [PageScriptController::class, 'update']);
+Route::get('/google-analytics', [GoogleAnalyticController::class, 'index']);
+Route::post('/google-analytics', [GoogleAnalyticController::class, 'store']);
 Route::middleware('jwt')->group(function () {
     Route::post('/profiles', [ProfileController::class, 'store']);
     Route::post('/profiles/{profile}', [ProfileController::class, 'update']);
